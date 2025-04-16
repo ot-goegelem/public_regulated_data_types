@@ -1,0 +1,51 @@
+# Request to compute the CRC of a file or directory.
+#
+# The CRC is computed using the CRC-32 algorithm.
+# The CRC is computed over the contents of the file or directory, not over the metadata.
+#
+# Case File:
+#   - If the path points to a file, the CRC is computed over the contents of the file.
+
+# Case Directory:
+#   - If the path points to a directory, the CRC is computed over a concatenation of the filenames.
+#   - The filenames are concatenated with a newline character (\n).
+#   - The filenames only contain the base name of the file, not the full path.
+#   - The content of sub-directories are not included in the CRC computation.
+#
+#   - Example:
+#      - Filesystem
+#        dir
+#        ├── sub-dir
+#        │   ├── sub-file1.txt
+#        │   └── sub-file2.txt
+#        ├── file1.txt
+#        └── file2.txt
+#
+#	   - The CRC request on the directory 'dir' will compute the CRC over the following content:
+#        """
+#            sub-dir
+#            file1.txt
+#            file2.txt
+#		 """
+#        i.e.: "sub-dir\nfile1.txt\nfile2.txt"
+# 	   - via python
+#       ``` python
+#           import binascii
+# 		    string = "sub-dir\nfile1.txt\nfile2.txt"
+# 		    print(f"0x{binascii.crc32(bytes(string, encoding='ascii')):08x}")
+#       ```
+#      - The CRC value will be 0x58c8a463
+
+Path.2.0 path
+
+@extent 300 * 8
+
+---
+
+Error.1.0 error
+# Result of the operation.
+
+uint32 crc
+# CRC of the file or directory.
+
+@extent 48 * 8
