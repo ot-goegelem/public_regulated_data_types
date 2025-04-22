@@ -1,6 +1,6 @@
 # Request to compute the CRC of a file or directory.
 #
-# The CRC is computed using the CRC-32 algorithm.
+# The CRC is computed using the CRC-32C algorithm documented in the Cyphal specification.
 # The CRC is computed over the contents of the file or directory, not over the metadata.
 #
 # Case File:
@@ -30,11 +30,16 @@
 #        i.e.: "sub-dir\nfile1.txt\nfile2.txt"
 # 	   - via python
 #       ``` python
-#           import binascii
-# 		    string = "sub-dir\nfile1.txt\nfile2.txt"
-# 		    print(f"0x{binascii.crc32(bytes(string, encoding='ascii')):08x}")
+#           ls=[
+#               "sub-dir",
+#               "file1.txt",
+#               "file2.txt",
+#           ]
+#           crc = CRC32C()
+#           crc.add(bytes("\n".join(ls), encoding='ascii'))
+#           print(f"0x{crc.value:08x}")
 #       ```
-#      - The CRC value will be 0x58c8a463
+#      - The CRC-32C value will be 0xecd3cb62
 
 Path.2.0 path
 
@@ -46,6 +51,6 @@ Error.1.0 error
 # Result of the operation.
 
 uint32 crc
-# CRC of the file or directory.
+# CRC of the file or directory in little-endian byte order.
 
 @extent 48 * 8
