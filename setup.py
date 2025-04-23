@@ -25,7 +25,10 @@ class CustomCommand(Command):
             cur_path = pathlib.Path(__file__).parent
             uavcan_path = cur_path / "uavcan"
             pycyphal.dsdl.compile_all(
-                root_namespace_directories=[uavcan_path.resolve()],
+                root_namespace_directories=[
+                    cur_path / "uavcan",
+                    cur_path / "reg",
+                ],
                 output_directory=output_dir,
             )
 
